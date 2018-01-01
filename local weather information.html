@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+body {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.weatherBox {
+  width: 60%;
+  margin: auto;
+  margin-top: 10%;
+  padding-top: 20px;
+  background-color: white;
+  opacity: 0.7;
+}
+.upperBox {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+}
+
+h1, h4, h3 {
+  text-align: center;
+}
+</style>
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous">
+  </script>
+<script>
+
+    var lat;
+    var lon;
+    var api = "https://fcc-weather-api.glitch.me/api/current?";
+    var currentTemp;
+    var fahrenheit;
+    
+$(document).ready(function(){
+  if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+        
+        lat = "lat=" + position.coords.latitude;
+        lon = "lon=" + position.coords.longitude;
+        getWeather(lat, lon);
+      });
+    };
+});
+
+function getWeather(lat, lon) {
+  var urlString = api + lat + "&" + lon;
+  
+    $.ajax({
+      url: urlString,
+      success: function(response) {
+      $('#location').text(response.name + ", " + response.sys.country);
+        currentTemp = Math.round(response.main.temp * 10)/10;
+      $('#temp').text(currentTemp + "°C / "); 
+        fahrenheit = Math.round((currentTemp * 9/5 + 32)*10)/10;
+      $('#fahrenheit').text(fahrenheit + "°F");
+      $('#condition').text(response.weather[0].description);  
+        wallpaper = (response.weather[0].id);
+        console.log(wallpaper);
+         if ( 199 < wallpaper && wallpaper < 233 ) {
+         //thunderstorm
+            $('body').css("background-image", "url(https://s.hswstatic.com/gif/thunderstorm-orig.jpg)");
+          }
+         else if ( 299 < wallpaper && wallpaper < 532) {
+         //rain
+            $('body').css("background-image", "url(http://i.imgur.com/FhtHy9S.jpg)"); 
+          }  
+         else if ( 599 < wallpaper && wallpaper < 623 ) {
+         //snow
+            $('body').css("background-image", "url(https://www.walldevil.com/wallpapers/a80/winter-snow-moscow-russia-apocalypse.jpg)");
+          }              
+         else if ( 700 < wallpaper && wallpaper < 805 ) {
+         //fog and clear//
+            $('body').css("background-image", 
+              "url(http://www.ironman.com/~/media/a69c29cfb52e4009a79bc51644fe1530/imbudapestbuilding%201600.jpg)");
+          }
+         else if ( 899 < wallpaper && wallpaper < 963 ) {
+         //others
+            $('body').css("background-image", "url(http://eskipaper.com/images/ireland-wallpaper-14.jpg)");
+          }  
+         else {
+            $('body').css("background-image", "url(https://www.hotelbaltpark.com/images/bp/blog/new-year-in-riga/New-year-in-Riga_1.jpg)");
+          }
+          }
+    })
+  };
+
+getWeather(lat, lon);  
+
+</script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <body>
+  <div id="background"> 
+    <div class="weatherBox">
+      <div class="upperBox">
+      <h1 id="title">Local weather App</h1>
+      <h3 id="location"></h3>
+      <h4><p>
+        <span id="temp"></span>
+        <span id="fahrenheit"></span>  
+        </p></h4>
+      <h4 id="condition"></h4>
+    </div>
+    </div>  
+  </div>     
+  </body>      
+</html>
